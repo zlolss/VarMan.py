@@ -1,4 +1,4 @@
-# VarMan.py
+# VarMan
 
 一个辅助监听变量赋值变化的类，基本用法类似dict类型
  
@@ -10,6 +10,10 @@
 
 
 # 使用方法
+
+```shell
+pip install varman
+```
 
 ```python
 import varman

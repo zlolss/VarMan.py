@@ -5,7 +5,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
   name="varman",
-  version="0.0.5",
+  version="0.0.6",
   author="zloss",
   author_email="zlos@foxmail.com",
   description="A dict like variable container, listen for variable changes.",
