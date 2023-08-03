@@ -1,11 +1,11 @@
 import setuptools
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding='utf-8') as fh:
   long_description = fh.read()
 
 setuptools.setup(
   name="varman",
-  version="0.0.1",
+  version="0.0.5",
   author="zloss",
   author_email="zlos@foxmail.com",
   description="A dict like variable container, listen for variable changes.",

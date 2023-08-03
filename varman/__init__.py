@@ -1,9 +1,8 @@
 
-from typing import Callable, NamedTuple, Awaitable, Any, List, Dict
-import collections
-from functools import wraps
 
-class VarMan(collections.abc.Mapping):
+import collections as __collections
+
+class VarMan(__collections.abc.Mapping):
     
     '''
 用法：
@@ -21,6 +20,8 @@ def fun(pre, nxt):
     
     def __init__(self, **defaults):
         
+        from typing import Callable, List, Dict
+        
         self.__vars = defaults
         self.__modify_sequence = []
         self.__modify_sequence_dropped = 0
@@ -33,7 +34,7 @@ def fun(pre, nxt):
             self.__listeners[key] = []
         def onmodify(func):
             self.__listeners[key].append(func)
-            print(f'addlistener:{func}')
+            # print(f'addlistener:{func}')
             return func
         return onmodify
 
@@ -62,11 +63,26 @@ def fun(pre, nxt):
     def __setitem__(self, key, value):
         return self.__setattr__(key, value)
     
-    
+    # -------------- wrap dict ---------------
     def __iter__(self):
 
         return iter(self.__vars)
+        
+    def items(self):
+        return self.__vars.items()
+        
+    def keys(self):
+        return self.__vars.keys()
+        
+    def __str__(self):
+        return str(self.__vars)
+        
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.__str__()})'
 
+    # todo: remove 
+    
+    # -------------- wrap dict end ---------------
     
     def __getattr__(self, key):
         if not self.__isValidVarName(key):
@@ -86,7 +102,7 @@ def fun(pre, nxt):
         if key in self.__vars and self.__vars[key] == value:
             return
         
-        prevalue = self.__vars.get(key,None)
+        prevalue = self.__vars.get(key, None)
         self.__vars[key] = value
         self.__modify_sequence.append(key)
         
