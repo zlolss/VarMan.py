@@ -39,20 +39,18 @@ print(var.POPMODIFY())
     set()
     {'a'}
     {'b'}
-    {'b', 'a'}
+    {'a', 'b'}
     
 
 ## 设置回调函数
 
 
 ```python
+# 对应变量“c”的回调函数
 @var.ONMODIFY('c')
 def fun(pre, nxt):
     print(f'pre c:{pre}, next c:{nxt}')  
 ```
-
-    addlistener:<function fun at 0x000001FFEEC396C0>
-    
 
 
 ```python
@@ -70,7 +68,63 @@ var['c'] = 4
     pre c:1, next c:4
     
 
-## 作为iter类型使用
+
+```python
+# var中任意变量改变时回调
+@var.ONMODIFYANY
+def func(varname, pre, nxt):
+    print(f'var:{varname}; pre: {pre}, next:{nxt}')
+```
+
+
+```python
+var.c = 1
+```
+
+    pre c:4, next c:1
+    var:c; pre: 4, next:1
+    
+
+
+```python
+var.a = 5
+```
+
+    var:a; pre: 2, next:5
+    
+
+
+```python
+var.dd = []
+```
+
+    var:dd; pre: None, next:[]
+    
+
+
+```python
+# 只能监听基本变量，或变量的id改变，无法监听list、dict等类型的内部更改
+var.dd.append(1)
+```
+
+
+```python
+# 移除监听器
+var.REMOVELISTENER('c')
+var.c = 8
+```
+
+    var:c; pre: 1, next:8
+    
+
+
+```python
+# 移除对任意变量的监听器
+var.REMOVEANYLISTENER()
+var.c = 10
+```
+
+## 作为iter类型使用(类似dict)
 
 
 ```python
@@ -78,9 +132,10 @@ for key in var:
     print(f'{key}:{var[key]}')
 ```
 
-    a:2
+    a:5
     b:3
-    c:4
+    c:10
+    dd:[1]
     
 
 
@@ -92,9 +147,10 @@ for key in var:
     print(f'{key}:{var[key]}')
 ```
 
-    a:2
+    a:5
     b:3
-    c:4
+    c:10
+    dd:[1]
     
 
 
@@ -112,12 +168,12 @@ def fun2(**params):
 fun2(**var)
 ```
 
-    {'a': 2, 'b': 3, 'c': 4}
+    {'a': 5, 'b': 3, 'c': 10, 'dd': [1]}
     
 
 
 ```python
-## 实例化的同时添加变量
+# 实例化的同时添加变量
 var2 = varman.VarMan(d = 8, e=10)
 print(var2)
 ```
@@ -137,6 +193,7 @@ var2
 
 
 
-# todo：
+
+# todo?
 
 - 删除变量

@@ -26,7 +26,8 @@ def fun(pre, nxt):
         self.__modify_sequence = []
         self.__modify_sequence_dropped = 0
         self.__consumers_seek = {'default':0}
-        self.__listeners:Dict[str,List] = {}
+        self.__listeners:Dict[str,List[Callable]] = {}
+        self.__anylisteners:List[Callable] = []
     
     
     def ONMODIFY(self, key:str):
@@ -37,6 +38,20 @@ def fun(pre, nxt):
             # print(f'addlistener:{func}')
             return func
         return onmodify
+        
+    
+    def REMOVELISTENER(self, key):
+        if key in self.__listeners:
+            del(self.__listeners[key])
+            
+    
+    def REMOVEANYLISTENER(self):
+        self.__anylisteners = []
+    
+    
+    def ONMODIFYANY(self, func):
+        self.__anylisteners.append(func)
+        return func
 
     
     def POPMODIFY(self, tag = 'default'):
@@ -79,6 +94,7 @@ def fun(pre, nxt):
         
     def __repr__(self):
         return f'{self.__class__.__name__}({self.__str__()})'
+            
 
     # todo: remove 
     
@@ -110,6 +126,9 @@ def fun(pre, nxt):
         if callbacks is not None:
             for callback in callbacks:
                 callback(prevalue, value)
+                
+        for callback in self.__anylisteners:
+            callback(key, prevalue, value)
             
     
     def __len__(self):
