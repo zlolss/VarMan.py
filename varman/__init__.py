@@ -4,6 +4,7 @@ import collections as __collections
 
 class VarMan(__collections.abc.Mapping):
     
+
     '''
 用法：
 var=VarManager()
@@ -20,7 +21,7 @@ def fun(pre, nxt):
     
     def __init__(self, **defaults):
         
-        from typing import Callable, List, Dict, Iterable
+        from typing import Callable, List, Dict
         
         self.__vars = defaults
         self.__modify_sequence = []
@@ -40,6 +41,7 @@ def fun(pre, nxt):
         return onmodify
         
     def __itemEqual(self, a, b):
+        from typing import Iterable
         if isinstance(a, Iterable):
             return id(a) == id(b)
         return a == b
@@ -119,7 +121,7 @@ def fun(pre, nxt):
             self.__dict__[key] = value
             return 
         
-        if key in self.__vars and self.__itemEqual(self.__vars[key] == value):
+        if key in self.__vars and self.__itemEqual(self.__vars[key], value):
             return
         
         prevalue = self.__vars.get(key, None)
