@@ -20,7 +20,7 @@ def fun(pre, nxt):
     
     def __init__(self, **defaults):
         
-        from typing import Callable, List, Dict
+        from typing import Callable, List, Dict, Iterable
         
         self.__vars = defaults
         self.__modify_sequence = []
@@ -39,6 +39,10 @@ def fun(pre, nxt):
             return func
         return onmodify
         
+    def __itemEqual(self, a, b):
+        if isinstance(a, Iterable):
+            return id(a) == id(b)
+        return a == b
     
     def REMOVELISTENER(self, key):
         if key in self.__listeners:
@@ -115,7 +119,7 @@ def fun(pre, nxt):
             self.__dict__[key] = value
             return 
         
-        if key in self.__vars and self.__vars[key] == value:
+        if key in self.__vars and self.__itemEqual(self.__vars[key] == value):
             return
         
         prevalue = self.__vars.get(key, None)
