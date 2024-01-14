@@ -107,6 +107,8 @@ var.dd = []
 var.dd.append(1)
 ```
 
+# 主动触发（2024年1月14日）
+var.CallModify('c') # 强制调用变量c的回调函数
 
 ```python
 # 移除监听器
